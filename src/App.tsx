@@ -1,3 +1,7 @@
+/**
+ * This app is live at https://hw2.uvod-do-robotiky.school.kaifer.cz/
+ */
+
 import React, { useState } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5";
