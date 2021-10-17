@@ -74,7 +74,6 @@ const Canvas = ({ tRef }: { tRef: React.MutableRefObject<number> }) => {
     p5.plane(200);
 
     drawPoint();
-    drawAxis();
     doStep(0, l0, 0, 0);
     doStep(q1, 1, 0, 0);
     doStep(p5.PI, q2, 0, p5.HALF_PI * 3);
@@ -86,9 +85,10 @@ const Canvas = ({ tRef }: { tRef: React.MutableRefObject<number> }) => {
 
 const App = () => {
   const [t, setT] = useState(0);
+
   return (
     <div className="App">
-      <div style={{ padding: 8 }}>
+      <div style={{ padding: 40 }}>
         <Slider
           value={t}
           onChange={(e, newVal) => setT(newVal as number)}
