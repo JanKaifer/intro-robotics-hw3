@@ -107,10 +107,10 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
         }}
       >
-        <span style={{ paddingRight: 20 }}>
+        <span style={{ paddingRight: 20, width: 40 }}>
           {name}={val}
         </span>
         <Slider
