@@ -60,6 +60,7 @@ const Canvas = ({
       drawPoint();
       p5.translate(moveX, 0, 0);
       p5.rotateX(angleX);
+      drawAxis();
     };
 
     const drawArrow = (p: Point) => {
@@ -67,10 +68,10 @@ const Canvas = ({
     };
 
     const drawAxis = () => {
-      drawArrow([0, 0, 100]);
+      drawArrow([0, 0, 20]);
       localChanges(() => {
         p5.stroke(255, 0, 0);
-        drawArrow([100, 0, 0]);
+        drawArrow([20, 0, 0]);
       });
     };
 
@@ -94,7 +95,7 @@ const Canvas = ({
     doStep(0, d(2) + cd(0.4), 0, 0);
     doStep(0, 0, 0, a(3) + ca(0.4));
     doStep(0, d(4) + cd(0.2), 0, 0);
-    doStep(0, 0, 0, a(5));
+    doStep(0, 0, 0, a(5) - ca(0.3));
     doStep(0, cd(0.1), 0, 0);
   };
 
@@ -133,7 +134,7 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
 
 const App = () => {
   const N = 6;
-  const maxT = [1, 0.2, 1, 0.3, 0.3, 1];
+  const maxT = [1, 0.2, 1, 0.3, 0.3, 0.6];
   const reverseT = [1, 1, 1, -1, 1, 1];
   const [ts, setTs] = useState(range(N).fill(0));
   const getT = (n: number) => (ts[n] / maxT[n]) * reverseT[n];
