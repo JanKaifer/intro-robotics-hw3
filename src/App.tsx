@@ -1,5 +1,5 @@
 /**
- * This app is live at https://hw2.uvod-do-robotiky.school.kaifer.cz/
+ * This app is live at https://hw3.uvod-do-robotiky.school.kaifer.cz/
  */
 
 import React, { useState } from "react";
@@ -13,17 +13,17 @@ import { Slider, Stack } from "@mui/material";
 type Point = [number, number, number];
 // type Vector = nj.NdArray<number>;
 
-// const range = (n: number) => new Array(n).fill(0).map((_, i) => i);
+const range = (n: number) => new Array(n).fill(0).map((_, i) => i);
 // const v2a = (p: nj.NdArray) => [p.get(0), p.get(1), p.get(2)] as const;
 // const a2v = (arr: [number, number, number]) => nj.array(arr);
 
 const Canvas = ({
-  t,
+  ts,
   x,
   y,
   z,
 }: {
-  t: number;
+  ts: number[];
   x: number;
   y: number;
   z: number;
@@ -32,6 +32,8 @@ const Canvas = ({
     p5.createCanvas(300, 500, p5.WEBGL).parent(canvasParentRef);
     p5.colorMode(p5.RGB);
   };
+
+  const t = ts[0];
 
   const draw = (p5: p5Types) => {
     const unit = 100;
@@ -81,6 +83,9 @@ const Canvas = ({
     };
 
     p5.background(255);
+    p5.rotateX(p5.TWO_PI * 0.2);
+    p5.rotateZ(p5.TWO_PI * 0.2);
+
     p5.rotateZ(p5.TWO_PI * z);
     p5.rotateX(p5.TWO_PI * x);
     p5.rotateY(p5.TWO_PI * y);
@@ -107,12 +112,12 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "center",
+          textAlign: "left",
         }}
       >
-        <span style={{ paddingRight: 20, width: 40 }}>
-          {name}={val}
-        </span>
+        <div style={{ paddingRight: 20, width: 100 }}>
+          {name} = {val}
+        </div>
         <Slider
           style={{ width: 100 }}
           value={val}
@@ -127,18 +132,41 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
 };
 
 const App = () => {
-  const [t, setT] = useState(0);
+  const N = 6;
+  const [ts, setTs] = useState(range(N));
+  const getT = (n: number) => ts[n];
+  const setT = (n: number) => (val: number) =>
+    setTs((oldTs) => oldTs.map((oldVal, idx) => (idx === n ? val : oldVal)));
+
   const [z, setZ] = useState(0);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
 
   return (
     <div className="App">
-      <MySlide val={t} setVal={setT} min={0} max={3} step={0.01} name="t" />
-      <MySlide val={z} setVal={setZ} min={0} max={1} step={0.01} name="z" />
-      <MySlide val={x} setVal={setX} min={0} max={1} step={0.01} name="x" />
-      <MySlide val={y} setVal={setY} min={0} max={1} step={0.01} name="y" />
-      <Canvas t={t} z={z} x={x} y={y} />
+      <div className="controls">
+        <div className="control-box">
+          <h3>Ovládání plošiny</h3>
+          {range(N).map((idx) => (
+            <MySlide
+              key={idx}
+              val={getT(idx)}
+              setVal={setT(idx)}
+              min={0}
+              max={3}
+              step={0.01}
+              name={`joint-${idx + 1}`}
+            />
+          ))}
+        </div>
+        <div className="control-box">
+          <h3>Ovládání kamery</h3>
+          <MySlide val={z} setVal={setZ} min={0} max={1} step={0.01} name="z" />
+          <MySlide val={x} setVal={setX} min={0} max={1} step={0.01} name="x" />
+          <MySlide val={y} setVal={setY} min={0} max={1} step={0.01} name="y" />
+        </div>
+      </div>
+      <Canvas ts={ts} z={z} x={x} y={y} />
     </div>
   );
 };
