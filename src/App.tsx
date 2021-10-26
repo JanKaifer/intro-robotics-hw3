@@ -33,15 +33,7 @@ const Canvas = ({
     p5.colorMode(p5.RGB);
   };
 
-  const t = ts[0];
-
   const draw = (p5: p5Types) => {
-    const unit = 100;
-    const l0 = 0.2 * unit;
-    const q1 = 0.5 * t;
-    const q2 = 0.5 + 0.3 * t * unit;
-    const q3 = 2 - 0.25 * t * unit;
-
     const localChanges = (callback: () => void) => {
       p5.push();
       callback();
@@ -82,6 +74,11 @@ const Canvas = ({
       });
     };
 
+    const ca = (val: number) => val * p5.TWO_PI;
+    const a = (idx: number) => ca(ts[idx]);
+    const cd = (val: number) => val * 100;
+    const d = (idx: number) => cd(ts[idx]);
+
     p5.background(255);
     p5.rotateX(p5.TWO_PI * 0.2);
     p5.rotateZ(p5.TWO_PI * 0.2);
@@ -92,10 +89,13 @@ const Canvas = ({
     p5.plane(200);
 
     drawPoint();
-    doStep(0, l0, 0, 0);
-    doStep(q1, 1, 0, 0);
-    doStep(p5.PI, q2, 0, p5.HALF_PI * 3);
-    doStep(0, q3, 0, 0);
+    doStep(a(0), 0, 0, 0);
+    doStep(0, 0, 0, a(1) - ca(0.1));
+    doStep(0, d(2) + cd(0.4), 0, 0);
+    doStep(0, 0, 0, a(3) + ca(0.4));
+    doStep(0, d(4) + cd(0.2), 0, 0);
+    doStep(0, 0, 0, a(5));
+    doStep(0, cd(0.1), 0, 0);
   };
 
   return <Sketch setup={setup} draw={draw} />;
@@ -116,7 +116,7 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
         }}
       >
         <div style={{ paddingRight: 20, width: 100 }}>
-          {name} = {val}
+          {name} = {val.toFixed(2)}
         </div>
         <Slider
           style={{ width: 100 }}
@@ -133,10 +133,16 @@ const MySlide = ({ val, setVal, min, max, step, name }: any) => {
 
 const App = () => {
   const N = 6;
-  const [ts, setTs] = useState(range(N));
-  const getT = (n: number) => ts[n];
+  const maxT = [1, 0.2, 1, 0.3, 0.3, 1];
+  const reverseT = [1, 1, 1, -1, 1, 1];
+  const [ts, setTs] = useState(range(N).fill(0));
+  const getT = (n: number) => (ts[n] / maxT[n]) * reverseT[n];
   const setT = (n: number) => (val: number) =>
-    setTs((oldTs) => oldTs.map((oldVal, idx) => (idx === n ? val : oldVal)));
+    setTs((oldTs) =>
+      oldTs.map((oldVal, idx) =>
+        idx === n ? val * maxT[n] * reverseT[n] : oldVal
+      )
+    );
 
   const [z, setZ] = useState(0);
   const [x, setX] = useState(0);
@@ -153,7 +159,7 @@ const App = () => {
               val={getT(idx)}
               setVal={setT(idx)}
               min={0}
-              max={3}
+              max={1}
               step={0.01}
               name={`joint-${idx + 1}`}
             />
