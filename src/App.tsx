@@ -174,6 +174,9 @@ const App = () => {
           <MySlide val={y} setVal={setY} min={0} max={1} step={0.01} name="y" />
         </div>
       </div>
+      <a href="https://github.com/JanKaifer/intro-robotics-hw3">
+        Edit me on github.
+      </a>
       <Canvas ts={ts} z={z} x={x} y={y} isAnimated={isAnimated} />
     </div>
   );
