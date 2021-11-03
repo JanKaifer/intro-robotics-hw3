@@ -148,7 +148,7 @@ const App = () => {
   const [z, setZ] = useState(0.2);
   const [x, setX] = useState(0.2);
   const [y, setY] = useState(0);
-  const [isAnimated, setIsAnimated] = useState(false);
+  const [isAnimated] = useState(false);
 
   return (
     <div className="App">
