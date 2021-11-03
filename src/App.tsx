@@ -8,7 +8,7 @@ import p5Types from "p5";
 // import nj from "numjs";
 
 import "./App.css";
-import { Slider, Stack, Button } from "@mui/material";
+import { Slider, Stack } from "@mui/material";
 
 type Point = [number, number, number];
 // type Vector = nj.NdArray<number>;
