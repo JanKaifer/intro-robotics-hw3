@@ -8,7 +8,7 @@ import p5Types from "p5";
 // import nj from "numjs";
 
 import "./App.css";
-import { Slider, Stack } from "@mui/material";
+import { Slider, Stack, Button } from "@mui/material";
 
 type Point = [number, number, number];
 // type Vector = nj.NdArray<number>;
@@ -22,11 +22,13 @@ const Canvas = ({
   x,
   y,
   z,
+  isAnimated,
 }: {
   ts: number[];
   x: number;
   y: number;
   z: number;
+  isAnimated: boolean;
 }) => {
   const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(300, 500, p5.WEBGL).parent(canvasParentRef);
@@ -80,12 +82,10 @@ const Canvas = ({
     const cd = (val: number) => val * 100;
     const d = (idx: number) => cd(ts[idx]);
 
-    p5.background(255);
-    p5.rotateX(p5.TWO_PI * 0.2);
-    p5.rotateZ(p5.TWO_PI * 0.2);
+    if (!isAnimated) p5.background(255);
 
-    p5.rotateZ(p5.TWO_PI * z);
     p5.rotateX(p5.TWO_PI * x);
+    p5.rotateZ(p5.TWO_PI * z);
     p5.rotateY(p5.TWO_PI * y);
     p5.plane(200);
 
@@ -145,9 +145,10 @@ const App = () => {
       )
     );
 
-  const [z, setZ] = useState(0);
-  const [x, setX] = useState(0);
+  const [z, setZ] = useState(0.2);
+  const [x, setX] = useState(0.2);
   const [y, setY] = useState(0);
+  const [isAnimated, setIsAnimated] = useState(false);
 
   return (
     <div className="App">
@@ -173,7 +174,7 @@ const App = () => {
           <MySlide val={y} setVal={setY} min={0} max={1} step={0.01} name="y" />
         </div>
       </div>
-      <Canvas ts={ts} z={z} x={x} y={y} />
+      <Canvas ts={ts} z={z} x={x} y={y} isAnimated={isAnimated} />
     </div>
   );
 };
